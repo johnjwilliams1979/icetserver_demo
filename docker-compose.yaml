@@ -1,0 +1,30 @@
+# docker-compose.yml
+services:
+  app:
+    build: .
+    container_name: my-node-app
+    restart: unless-stopped
+    depends_on:
+     - mongo
+    environment:
+     - MONGO_URL=mongodb://mongo:27017/mydb
+    networks:
+     - app-network
+    volumes:
+     - .:/usr/src/app
+    ports:
+     - "8888:8080"
+
+  mongo:
+    image: mongo:8.0
+    container_name: mongo-db
+    restart: unless-stopped
+    networks:
+    - app-network
+    volumes:
+    - "../../../../../../../Program Files/MongoDB/Server/8.0/data:/data/db"
+    ports:
+    - "27017:27017"
+networks:
+  app-network:
+    driver: bridge
